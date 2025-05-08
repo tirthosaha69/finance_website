@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Wealth Architect - Goals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/goals.css') }}">
+  
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="flex items-center gap-4">
+                <div class="navbar-menu-btn" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="navbar-brand">
+                    <div class="navbar-logo">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Wealth Architect</span>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-actions">
+                <div class="navbar-action" id="dark-mode-toggle">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <div class="navbar-action">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="profile-dropdown">
+                    <img src="/api/placeholder/40/40" alt="Profile" />
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-menu">
+                <a href="/">
+                    <div class="sidebar-menu-item">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </div>
+                </a>
+                <div class="sidebar-menu-item">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Copilot</span>
+                </div>
+                <a href="/budget">
+                    <div class="sidebar-menu-item">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Budget</span>
+                    </div>
+                </a>
+                <a href="/goals">
+                    <div class="sidebar-menu-item active">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Goals</span>
+                    </div>
+                </a>
+                <a href="/investments">
+                    <div class="sidebar-menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Investments</span>
+                    </div>
+                </a>
+                <a href="/alerts">
+                    <div class="sidebar-menu-item">
+                        <i class="fas fa-bell"></i>
+                        <span>Alerts</span>
+                    </div>
+                </a>
+                <a href="/settings">
+                    <div class="sidebar-menu-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Overlay for mobile -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Financial Goals</h1>
+                <div class="date-filter">
+                    <i class="fas fa-calendar"></i>
+                    <span>May 2025</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+
+            <!-- Goal Stats -->
+            <div class="goal-stats">
+                <div class="card summary-card">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon"
+                            style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary);">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="stat-card-title">Active Goals</div>
+                    </div>
+                    <div class="stat-card-value">5</div>
+                </div>
+
+                <div class="card summary-card">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon"
+                            style="background-color: rgba(16, 185, 129, 0.1); color: var(--secondary);">
+                            <i class="fas fa-piggy-bank"></i>
+                        </div>
+                        <div class="stat-card-title">Total Goal Savings</div>
+                    </div>
+                    <div class="stat-card-value">$28,750</div>
+                </div>
+
+                <div class="card summary-card">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon"
+                            style="background-color: rgba(245, 158, 11, 0.1); color: var(--warning);">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-card-title">Average Time to Completion</div>
+                    </div>
+                    <div class="stat-card-value">4.2 months</div>
+                </div>
+
+                <div class="card summary-cardd">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon" style="background-color: rgba(79, 70, 229, 0.1); color: #4F46E5;">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-card-title">Completed Goals</div>
+                    </div>
+                    <div class="stat-card-value">3</div>
+                </div>
+            </div>
+
+            <!-- Goal Chart Section -->
+            <div class="goal-chart-section">
+                <div class="chart-card">
+                    <div class="goal-chart-header">
+                        <div class="goal-chart-title">Goal Progress Over Time</div>
+                        <div class="goal-chart-actions">
+                            <div class="goal-chart-action">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="goalProgressChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="goal-chart-title">Monthly Contributions</div>
+                        <div class="goal-chart-actions">
+                            <div class="goal-chart-action">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="contributionsChart"></canvas>
+                    </div>
+                    <div class="contribution-info">
+                        <div>
+                            <div class="contribution-value">$1,250</div>
+                            <div class="contribution-label">Average Monthly</div>
+                        </div>
+                        <div class="contribution-change up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>15% from last month</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goals Filter -->
+            <div class="goal-title-section">
+                <div class="goal-title">My Goals</div>
+                <div class="goal-actions">
+                    <div class="goal-action" id="add-goal-button">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="goal-action">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="goal-filters">
+                <div class="filter-pill active">All Goals (5)</div>
+                <div class="filter-pill">On Track (3)</div>
+                <div class="filter-pill">Behind (1)</div>
+                <div class="filter-pill">Completed (1)</div>
+            </div>
+
+            <!-- Goals List -->
+            <div class="goals-list">
+                <!-- Vacation Fund Goal -->
+                <div class="goal-card-full">
+                    <div class="goal-header-full">
+                        <div class="goal-title-info">
+                            <div class="goal-icon"
+                                style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary);">
+                                <i class="fas fa-plane"></i>
+                            </div>
+                            <div class="goal-info">
+                                <div class="goal-name">Vacation Fund</div>
+                                <div class="goal-category">
+                                    <i class="fas fa-tag"></i>
+                                    <span>Travel</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="goal-badge on-track">On Track</div>
+                    </div>
+                    <div class="goal-amount-full">$3,750 / $5,000</div>
+                    <div class="goal-dates">
+                        <div>Started: February 12, 2025</div>
+                        <div>Target: August 15, 2025</div>
+                    </div>
+                    <div class="goal-progress-full">
+                        <div class="goal-progress-bar-full" style="width: 75%; background-color: var(--primary);"></div>
+                    </div>
+                    <div class="goal-progress-info-full">
+                        <div>75% Complete</div>
+                        <div>3 months left</div>
+                    </div>
+                    <div class="goal-description">
+                        European trip planned for August. Need to save for flights, accommodations, and spending money.
+                        Currently saving $350/month toward this goal.
+                    </div>
+                    <div class="goal-actions-full">
+                        <div class="goal-action-button primary">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Funds</span>
+                        </div>
+                        <div class="goal-action-button secondary">
+                            <i class="fas fa-edit"></i>
+                            <span>Edit Goal</span>
+                        </div>
+                        <div class="goal-action-button secondary">
+                            <i class="fas fa-chart-line"></i>
+                            <span>View Details</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Fund Goal -->
+                <div class="goal-card-full">
+                    <div class="goal-header-full">
+                        <div class="goal-title-info">
+                            <div class="goal-icon"
+                                style="background-color: rgba(239, 68, 68, 0.1); color: var(--danger);">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="goal-info">
+                                <div class="goal-name">Emergency Fund</div>
+                                <div class="goal-category">
+                                    <i class="fas fa-tag"></i>
+                                    <span>Security</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="goal-badge on-track">On Track</div>
+                    </div>
+                    <div class="goal-amount-full">$12,000 / $15,000</div>
+                    <div class="goal-dates">
+                        <div>Started: October 5, 2024</div>
+                        <div>Target: July 15, 2025</div>
+                    </div>
+                    <div class="goal-progress-full">
+                        <div class="goal-progress-bar-full" style="width: 80%; background-color: var(--danger);"></div>
+                    </div>
+                    <div class="goal-progress-info-full">
+                        <div>80% Complete</div>
+                        <div>2 months left</div>
+                    </div>
+                    <div class="goal-description">
+                        Building a 6-month emergency fund to cover essential expenses in case of job loss or unexpected
+                        emergencies.
+                        Currently saving $500/month toward this goal.
+                    </div>
+                    <div class="goal-actions-full">
+                        <div class="goal-action-button primary">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Funds</span>
+                        </div>
+                        <div class="goal-action-button secondary">
+                            <i class="fas fa-edit"></i>
+                            <span>Edit Goal</span>
+                        </div>
+                        <div class="goal-action-button secondary">
+                            <i class="fas fa-chart-line"></i>
+                            <span>View Details</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Car Goal -->
+                <div class="goal-card-full">
+                    <div class="goal-header-full">
+                        <div class="goal-title-info">
+                            <div class="goal-icon"
+                                style="background-color: rgba(245, 158, 11, 0.1); color: var(--warning);">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="goal-info">
+                                <div class="goal-name">New Car</div>
+                                <div class="goal-category">
+                                    <i class="fas fa-tag"></i>
+                                    <span>Major Purchase</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="goal-badge behind">Behind</div>
+                    </div>
+                    <div class="goal-amount-full">$8,500 / $25,000</div>
+                    <div class="goal-dates">
+                        <div>Started: January 10, 2025</div>
+                        <div>Target: January 10, 2026</div>
+                    </div>
+                    <div class="goal-progress-full">
+                        <div class="goal-progress-bar-full" style="width: 34%; background-color: var(--warning);"></div>
+                    </div>
+                    <div class="goal-progress-info-full">
+                        <div>34% Complete</div>
+                        <div>8 months left</div>
+                    </div>
+                    <div class="goal-description">
+                        Saving for a new electric vehicle. Based on current savings rate, may need to extend goal
+                        timeline or
+                        increase monthly contributions. Currently saving $850/month.
+                    </div>
+                    <div class="goal-actions-full">
+                        <div class="goal-action-button primary">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Funds</span>
+                        </div>
+                        <div class="goal-action-button secondary">
+                            <i class="fas fa-edit"></i>
+                            <span>Edit Goal</span>
+                        </div>
+                        <div class="goal-action-button secondary">
+                            <i class="fas fa-chart-line"></i>
+                            <span>View Details</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Home Down Payment -->
+                <div class="goal-card-full">
+                    <div class="goal-header-full">
+                        <div class="goal-title-info">
+                            <div class="goal-icon"
+                                style="background-color: rgba(16, 185, 129, 0.1); color: var(--secondary);">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div class="goal-info">
+                                <div class="goal-name">Home Down Payment</div>
+                                <div class="goal-category">
+                                    <i class="fas fa-tag"></i>
+                                    <span>Real Estate</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="goal-badge on-track">On Track</div>
+                    </div>
+                    <div class="goal-amount-full">$35,000 / $60,000</div>
+                    <div class="goal-dates">
+                        <div>Started: July 1, 2024</div>
+                        <div>Target: December 31, 2025</div>
+                    </div>
+                    <div class="goal-progress-full">
+                        <div class="goal-progress-bar-full" style="width: 58%; background-color: var(--secondary);">
+                        </div>
+                    </div>
+                    <div class="goal-progress-info-full">
+                        <div>58% Complete</div>
+                        <div>7 months left</div>
+                    </div>
+                    <div class="goal-description">
+                        Saving for a 20% down payment on a home in the $300,000 range. Currently saving $1,500/month
+                        with additional
+                        quarterly bonuses allocated to this goal.
+                    </div>
+                    <div class="goal-actions-full">
+                        <div class="goal-action-button primary">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Funds</span>
+                        </div>
+                        <div class="goal-action-button secondary">
+                            <i class="fas fa-edit"></i>
+                            <span>Edit Goal</span>
+                        </div>
+                        <div class="goal-action-button secondary">
+                            <i class="fas fa-chart-line"></i>
+                            <span>View Details</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education Fund -->
+                <div class="goal-card-full">
+                    <div class="goal-header-full">
+                        <div class="goal-title-info">
+                            <div class="goal-icon" style="background-color: rgba(79, 70, 229, 0.1); color: #4F46E5;">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="goal-info">
+                                <div class="goal-name">Education Fund</div>
+                                <div class="goal-category">
+                                    <i class="fas fa-tag"></i>
+                                    <span>Education</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="goal-badge completed">Completed</div>
+                    </div>
+                    <div class="goal-amount-full">$12,000 / $12,000</div>
+                    <div class="goal-dates">
+                        <div>Started: November 5, 2024</div>
+                        <div>Completed: April 15, 2025</div>
+                    </div>
+                    <div class="goal-progress-full">
+                        <div class="goal-progress-bar-full" style="width: 100%; background-color: #4F46E5;"></div>
+                    </div>
+                    <div class="goal-progress-info-full">
+                        <div>100% Complete</div>
+                        <div>Completed 3 weeks ago</div>
+                    </div>
+                    <div class="goal-description">
+                        Professional certification and skill development fund. Successfully saved for advanced data
+                        science
+                        course and related professional certifications.
+                    </div>
+                    <div class="goal-actions-full">
+                        <div class="goal-action-button primary">
+                            <i class="fas fa-flag"></i>
+                            <span>Mark Complete</span>
+                        </div>
+                        <div class="goal-action-button secondary">
+                            <i class="fas fa-copy"></i>
+                            <span>Create Similar</span>
+                        </div>
+                        <div class="goal-action-button secondary">
+                            <i class="fas fa-chart-line"></i>
+                            <span>View Details</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Goal Card -->
+                <div class="add-goal-card" id="add-goal-card">
+                    <div class="add-goal-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="add-goal-text">Add New Goal</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Goal Details Modal -->
+    <div class="goal-details-modal" id="goal-details-modal">
+        <div class="goal-details-content">
+            <div class="goal-details-header">
+                <h2>Create New Goal</h2>
+                <div class="goal-details-close" id="close-goal-modal">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <form id="goal-form">
+                <div class="goal-form-group">
+                    <label class="goal-form-label" for="goal-name">Goal Name</label>
+                    <input type="text" class="goal-form-input" id="goal-name" placeholder="Enter goal name">
+                </div>
+                <div class="goal-form-group">
+                    <label class="goal-form-label" for="goal-category">Category</label>
+                    <select class="goal-form-select" id="goal-category">
+                        <option value="">Select a category</option>
+                        <option value="travel">Travel</option>
+                        <option value="security">Security</option>
+                        <option value="major_purchase">Major Purchase</option>
+                        <option value="real_estate">Real Estate</option>
+                        <option value="education">Education</option>
+                        <option value="retirement">Retirement</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="goal-form-group">
+                    <label class="goal-form-label" for="goal-amount">Target Amount</label>
+                    <input type="number" class="goal-form-input" id="goal-amount" placeholder="Enter target amount">
+                </div>
+                <div class="goal-form-group">
+                    <label class="goal-form-label" for="goal-date">Target Date</label>
+                    <input type="date" class="goal-form-input" id="goal-date">
+                </div>
+                <div class="goal-form-group">
+                    <label class="goal-form-label" for="goal-initial">Initial Deposit</label>
+                    <input type="number" class="goal-form-input" id="goal-initial" placeholder="Enter initial deposit">
+                </div>
+                <div class="goal-form-group">
+                    <label class="goal-form-label" for="goal-recurring">Monthly Contribution</label>
+                    <input type="number" class="goal-form-input" id="goal-recurring"
+                        placeholder="Enter monthly contribution">
+                </div>
+                <div class="goal-form-group">
+                    <label class="goal-form-label" for="goal-description">Description</label>
+                    <textarea class="goal-form-textarea" id="goal-description"
+                        placeholder="Enter goal description"></textarea>
+                </div>
+                <div class="goal-form-buttons">
+                    <button type="button" class="goal-form-button cancel" id="cancel-goal-form">Cancel</button>
+                    <button type="submit" class="goal-form-button save">Create Goal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar
+
+        const overlay = document.getElementById('overlay');
+
+
+
+
+
+
+
+
+        // Modal functionality
+        const addGoalButton = document.getElementById('add-goal-button');
+        const addGoalCard = document.getElementById('add-goal-card');
+        const goalDetailsModal = document.getElementById('goal-details-modal');
+        const closeGoalModal = document.getElementById('close-goal-modal');
+        const cancelGoalForm = document.getElementById('cancel-goal-form');
+
+        function openGoalModal() {
+            goalDetailsModal.classList.add('active');
+        }
+
+        function closeGoalModalFunc() {
+            goalDetailsModal.classList.remove('active');
+        }
+
+        addGoalButton.addEventListener('click', openGoalModal);
+        addGoalCard.addEventListener('click', openGoalModal);
+        closeGoalModal.addEventListener('click', closeGoalModalFunc);
+        cancelGoalForm.addEventListener('click', closeGoalModalFunc);
+
+        // Charts
+        const ctx1 = document.getElementById('goalProgressChart').getContext('2d');
+        const ctx2 = document.getElementById('contributionsChart').getContext('2d');
+
+        // Goal Progress Chart
+        const goalProgressChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Progress',
+                    data: [5000, 8750, 12500, 18000, 22500, 28750],
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Contributions Chart
+        const contributionsChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Monthly Contribution',
+                    data: [800, 950, 1100, 1250, 1350, 1550],
+                    backgroundColor: 'rgba(16, 185, 129, 0.7)'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Filter functionality
+        const filterPills = document.querySelectorAll('.filter-pill');
+
+        filterPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                filterPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                // Add filter logic here
+            });
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

@@ -1,18 +1,9 @@
 // DOM Elements
-const sidebarToggle = document.getElementById('sidebar-toggle');
-const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('overlay');
-const darkModeToggle = document.getElementById('dark-mode-toggle');
-const body = document.body;
 const mobileMenu = document.getElementById('mobile-menu');
 const mobileMenuItems = document.querySelectorAll('.mobile-menu-item');
 const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item');
 
-// Toggle sidebar
-sidebarToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('open');
-    overlay.classList.toggle('active');
-});
 
 // Close sidebar when clicking overlay
 overlay.addEventListener('click', () => {
@@ -20,17 +11,7 @@ overlay.addEventListener('click', () => {
     overlay.classList.remove('active');
 });
 
-// Toggle dark mode
-darkModeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
 
-    // Update dark mode icon
-    if (body.classList.contains('dark-mode')) {
-        darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-    } else {
-        darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-    }
-});
 
 // Mobile menu active state
 mobileMenuItems.forEach(item => {

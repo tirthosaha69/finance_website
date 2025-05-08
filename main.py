@@ -9,6 +9,12 @@ def dashboard():
 @app.route('/budget')
 def budget():
     return render_template('budget.html')
+@app.route('/investments')
+def investment():
+    return render_template('investments.html')
+@app.route('/goals')
+def goals():
+    return render_template('goals.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
