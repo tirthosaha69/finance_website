@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Wealth Architect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/dashboard.css') }}">
+
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="flex items-center gap-4">
+                <div class="navbar-menu-btn" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="navbar-brand">
+                    <div class="navbar-logo">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Wealth Architect</span>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-actions">
+                <div class="navbar-action" id="dark-mode-toggle">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <div class="navbar-action">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="profile-dropdown">
+                    <img src="/api/placeholder/40/40" alt="Profile" />
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-menu">
+                <a href="/">
+                    <div class="sidebar-menu-item active">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </div>
+                </a>
+                <div class="sidebar-menu-item">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Copilot</span>
+                </div>
+                <a href="/budget">
+
+                    <div class="sidebar-menu-item">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Budget</span>
+                    </div>
+                </a>
+                <a href="/goals">
+                    <div class="sidebar-menu-item">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Goals</span>
+                    </div>
+                </a>
+                <a href="/investments">
+                    <div class="sidebar-menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Investments</span>
+                    </div>
+                </a>
+                <a href="/alerts">
+                    <div class="sidebar-menu-item">
+                        <i class="fas fa-bell"></i>
+                        <span>Alerts</span>
+                    </div>
+                </a>
+                <a href="/settings">
+                    <div class="sidebar-menu-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Overlay for mobile -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Dashboard</h1>
+                <div class="date-filter">
+                    <i class="fas fa-calendar"></i>
+                    <span>May 2025</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="card summary-card">
+                    <div class="summary-card-header">
+                        <div class="summary-card-label">
+                            <div class="summary-card-icon"
+                                style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary);">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <span>Total Income</span>
+                        </div>
+                    </div>
+                    <div class="summary-card-value" id="income-value">$0</div>
+                    <div class="summary-card-trend trend-up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>8.2% from last month</span>
+                    </div>
+                </div>
+
+                <div class="card summary-card">
+                    <div class="summary-card-header">
+                        <div class="summary-card-label">
+                            <div class="summary-card-icon"
+                                style="background-color: rgba(239, 68, 68, 0.1); color: var(--danger);">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <span>Total Expenses</span>
+                        </div>
+                    </div>
+                    <div class="summary-card-value" id="expenses-value">$0</div>
+                    <div class="summary-card-trend trend-down">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>4.5% from last month</span>
+                    </div>
+                </div>
+
+                <div class="card summary-card">
+                    <div class="summary-card-header">
+                        <div class="summary-card-label">
+                            <div class="summary-card-icon"
+                                style="background-color: rgba(16, 185, 129, 0.1); color: var(--secondary);">
+                                <i class="fas fa-piggy-bank"></i>
+                            </div>
+                            <span>Total Savings</span>
+                        </div>
+                    </div>
+                    <div class="summary-card-value" id="savings-value">$0</div>
+                    <div class="summary-card-trend trend-up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>12.3% from last month</span>
+                    </div>
+                </div>
+
+                <div class="card summary-card">
+                    <div class="summary-card-header">
+                        <div class="summary-card-label">
+                            <div class="summary-card-icon"
+                                style="background-color: rgba(245, 158, 11, 0.1); color: var(--warning);">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span>Investments</span>
+                        </div>
+                    </div>
+                    <div class="summary-card-value" id="investments-value">$0</div>
+                    <div class="summary-card-trend trend-up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>5.8% from last month</span>
+                    </div>
+                </div>
+
+                <div class="card summary-card">
+                    <div class="summary-card-header">
+                        <div class="summary-card-label">
+                            <div class="summary-card-icon"
+                                style="background-color: rgba(16, 185, 129, 0.1); color: var(--secondary);">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <span>Budget Left</span>
+                        </div>
+                    </div>
+                    <div class="summary-card-value" id="budget-value">$0</div>
+                    <div class="summary-card-trend trend-up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>2.1% from last month</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Insights -->
+            <div class="ai-insights">
+                <div class="ai-insights-header">
+                    <i class="fas fa-lightbulb"></i>
+                    <div class="ai-insights-title">AI Financial Insight</div>
+                </div>
+                <div class="ai-insights-content">
+                    You're 75% to your vacation goal! Based on your current savings rate of $350/month, you'll reach
+                    your target of $5,000 in just 3 more months. Consider allocating an extra $150 from your
+                    entertainment budget to reach your goal a month earlier.
+                </div>
+                <div class="ai-insights-actions">
+                    <div class="ai-insights-action">Adjust Budget</div>
+                    <div class="ai-insights-action">Ask AI Copilot</div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-container">
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div class="chart-card-title">Income vs Expenses</div>
+                        <div class="chart-card-actions">
+                            <div class="chart-card-action">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="incomeExpensesChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div class="chart-card-title">Expense Breakdown</div>
+                        <div class="chart-card-actions">
+                            <div class="chart-card-action">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="expenseBreakdownChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Goals -->
+            <div class="goals-section">
+                <div class="goals-header">
+                    <div class="goals-title">Financial Goals</div>
+                    <div class="goals-action">
+                        <i class="fas fa-plus"></i>
+                        <span>Add New Goal</span>
+                    </div>
+                </div>
+                <div class="goals-grid">
+                    <div class="goal-card">
+                        <div class="goal-card-header">
+                            <div class="goal-card-title">Vacation Fund</div>
+                            <div class="goal-card-badge">On Track</div>
+                        </div>
+                        <div class="goal-card-amount">$3,750 / $5,000</div>
+                        <div class="goal-card-desc">European trip planned for August</div>
+                        <div class="goal-progress">
+                            <div class="goal-progress-bar" style="width: 75%;"></div>
+                        </div>
+                        <div class="goal-progress-info">
+                            <div>75% Complete</div>
+                            <div>3 months left</div>
+                        </div>
+                    </div>
+
+                    <div class="goal-card">
+                        <div class="goal-card-header">
+                            <div class="goal-card-title">Emergency Fund</div>
+                            <div class="goal-card-badge">On Track</div>
+                        </div>
+                        <div class="goal-card-amount">$12,000 / $15,000</div>
+                        <div class="goal-card-desc">6 months of essential expenses</div>
+                        <div class="goal-progress">
+                            <div class="goal-progress-bar" style="width: 80%;"></div>
+                        </div>
+                        <div class="goal-progress-info">
+                            <div>80% Complete</div>
+                            <div>2 months left</div>
+                        </div>
+                    </div>
+
+                    <div class="goal-card">
+                        <div class="goal-card-header">
+                            <div class="goal-card-title">New Car</div>
+                            <div class="goal-card-badge">Behind</div>
+                        </div>
+                        <div class="goal-card-amount">$8,500 / $25,000</div>
+                        <div class="goal-card-desc">Planned for next year</div>
+                        <div class="goal-progress">
+                            <div class="goal-progress-bar" style="width: 34%;"></div>
+                        </div>
+                        <div class="goal-progress-info">
+                            <div>34% Complete</div>
+                            <div>8 months left</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="transactions-section">
+                <div class="transactions-header">
+                    <div class="transactions-title">Recent Transactions</div>
+                    <div class="transactions-filter">
+                        <i class="fas fa-filter"></i>
+                        <span>Filter</span>
+                    </div>
+                </div>
+                <div class="transactions-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Transaction</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="transaction-name">
+                                        <div class="transaction-icon">
+                                            <i class="fas fa-shopping-bag"></i>
+                                        </div>
+                                        <div class="transaction-details">
+                                            <div class="transaction-title">Whole Foods Market</div>
+                                            <div class="transaction-category">Groceries</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="transaction-amount expense">-$186.25</div>
+                                </td>
+                                <td>
+                                    <div class="transaction-date">May 7, 2025</div>
+                                </td>
+                                <td>
+                                    <div class="transaction-status completed">Completed</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="transaction-name">
+                                        <div class="transaction-icon">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                        <div class="transaction-details">
+                                            <div class="transaction-title">Acme Corp</div>
+                                            <div class="transaction-category">Salary</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="transaction-amount income">+$4,500.00</div>
+                                </td>
+                                <td>
+                                    <div class="transaction-date">May 1, 2025</div>
+                                </td>
+                                <td>
+                                    <div class="transaction-status completed">Completed</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="transaction-name">
+                                        <div class="transaction-icon">
+                                            <i class="fas fa-home"></i>
+                                        </div>
+                                        <div class="transaction-details">
+                                            <div class="transaction-title">Rent Payment</div>
+                                            <div class="transaction-category">Housing</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="transaction-amount expense">-$2,100.00</div>
+                                </td>
+                                <td>
+                                    <div class="transaction-date">May 1, 2025</div>
+                                </td>
+                                <td>
+                                    <div class="transaction-status completed">Completed</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="transaction-name">
+                                        <div class="transaction-icon">
+                                            <i class="fas fa-utensils"></i>
+                                        </div>
+                                        <div class="transaction-details">
+                                            <div class="transaction-title">Sushi Place</div>
+                                            <div class="transaction-category">Dining</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="transaction-amount expense">-$75.80</div>
+                                </td>
+                                <td>
+                                    <div class="transaction-date">April 28, 2025</div>
+                                </td>
+                                <td>
+                                    <div class="transaction-status completed">Completed</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="transaction-name">
+                                        <div class="transaction-icon">
+                                            <i class="fas fa-car"></i>
+                                        </div>
+                                        <div class="transaction-details">
+                                            <div class="transaction-title">Auto Insurance</div>
+                                            <div class="transaction-category">Insurance</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="transaction-amount expense">-$145.50</div>
+                                </td>
+                                <td>
+                                    <div class="transaction-date">April 25, 2025</div>
+                                </td>
+                                <td>
+                                    <div class="transaction-status completed">Completed</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        <!-- <div class="mobile-menu" id="mobile-menu"> -->
+        <!-- <div class="mobile-menu-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </div>
+            <div class="mobile-menu-item">
+                <i class="fas fa-robot"></i>
+                <span>AI Copilot</span>
+            </div>
+            <div class="mobile-menu-item">
+                <i class="fas fa-chart-pie"></i>
+                <span>Budget</span>
+            </div>
+            <div class="mobile-menu-item">
+                <i class="fas fa-bullseye"></i>
+                <span>Goals</span>
+            </div>
+            <div class="mobile-menu-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </div>
+        </div> -->
+        <!-- </div> -->
+
+        <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+
+</body>
+
+</html>
